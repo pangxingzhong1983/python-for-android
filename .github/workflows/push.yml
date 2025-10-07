@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout python-for-android
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Set up Python 3.x
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: 3.x
     - name: Run flake8
@@ -35,16 +35,18 @@ jobs:
     needs: flake8
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
-        os: [ubuntu-latest, macOs-latest]
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.14t']
+        os: [ubuntu-latest, macos-latest]
     steps:
     - name: Checkout python-for-android
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
     - name: Tox tests
       run: |
         python -m pip install --upgrade pip
@@ -114,9 +116,9 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        # macos-latest (ATM macos-14) runs on Apple Silicon,
-        # macos-13 runs on Intel
-        runs_on: ['macos-latest', 'macos-13']
+        # macos-latest (ATM macos-15) runs on Apple Silicon,
+        # macos-15-intel runs on Intel
+        runs_on: ['macos-latest', 'macos-15-intel']
         bootstrap:
           - name: sdl2
             target: testapps-with-numpy
@@ -129,14 +131,14 @@ jobs:
       ANDROID_NDK_HOME: ${HOME}/.android/android-ndk
     steps:
       - name: Checkout python-for-android
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set up Python 3.x
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.x
       - name: Install python-for-android
         run: |
-          python3 -m pip install -e .
+          python3 -m pip install --editable .
       - name: Install prerequisites via pythonforandroid/prerequisites.py (Experimental)
         run: |
           python3 pythonforandroid/prerequisites.py
@@ -174,7 +176,7 @@ jobs:
       REBUILD_UPDATED_RECIPES_EXTRA_ARGS: --arch=${{ matrix.android_arch }}
     steps:
     - name: Checkout python-for-android (all-history)
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
     # helps with GitHub runner getting out of space
@@ -201,9 +203,9 @@ jobs:
     strategy:
       matrix:
         android_arch: ["arm64-v8a", "armeabi-v7a", "x86_64", "x86"]
-        # macos-latest (ATM macos-14) runs on Apple Silicon,
-        # macos-13 runs on Intel
-        runs_on: ['macos-latest', 'macos-13']
+        # macos-latest (ATM macos-15) runs on Apple Silicon,
+        # macos-15-intel runs on Intel
+        runs_on: ['macos-latest', 'macos-15-intel']
     env:
       ANDROID_HOME: ${HOME}/.android
       ANDROID_SDK_ROOT: ${HOME}/.android/android-sdk
@@ -212,16 +214,16 @@ jobs:
       REBUILD_UPDATED_RECIPES_EXTRA_ARGS: --arch=${{ matrix.android_arch }}
     steps:
       - name: Checkout python-for-android (all-history)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Set up Python 3.x
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.x
       - name: Install python-for-android
         run: |
-          python3 -m pip install -e .
+          python3 -m pip install --editable .
       - name: Install prerequisites via pythonforandroid/prerequisites.py (Experimental)
         run: |
           python3 pythonforandroid/prerequisites.py
@@ -244,7 +246,7 @@ jobs:
   documentation:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Requirements
       run: |
         python -m pip install --upgrade pip
