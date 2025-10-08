@@ -80,7 +80,7 @@ jobs:
             target: testapps-qt
     steps:
     - name: Checkout python-for-android
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Build python-for-android docker image
       run: |
         docker build --tag=kivy/python-for-android .
@@ -163,6 +163,26 @@ jobs:
         with:
           name: ${{ matrix.runs_on }}-${{ matrix.bootstrap.name }}-artifacts
           path: dist
+
+  test_on_emulator:
+    name: Run App on Emulator
+    needs: ubuntu_build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download Artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: ubuntu-latest-sdl2-artifacts
+          path: dist/
+
+      - name: Setup and start Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          arch: x86_64
+          script: ci/run_emulator_tests.sh
 
   ubuntu_rebuild_updated_recipes:
     name: Test updated recipes for arch ${{ matrix.android_arch }} [ ubuntu-latest ]
