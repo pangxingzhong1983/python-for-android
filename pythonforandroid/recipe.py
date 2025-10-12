@@ -977,7 +977,7 @@ class PythonRecipe(Recipe):
         self.patch_shebangs(self._host_recipe.local_bin, self.real_hostpython_location)
         env["PATH"] = self._host_recipe.local_bin + ":" + self._host_recipe.site_bin + ":" + env["PATH"]
 
-        host_env = self.get_hostrecipe_env()
+        host_env = self.get_hostrecipe_env(arch)
         env['PYTHONPATH'] = host_env["PYTHONPATH"]
 
         if not self.call_hostpython_via_targetpython:
