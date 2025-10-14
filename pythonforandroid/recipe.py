@@ -1368,6 +1368,7 @@ class MesonRecipe(PyProjectRecipe):
                 "cpp_args": self.sanitize_flags(env["CXXFLAGS"], env["CPPFLAGS"]),
                 "c_link_args": self.sanitize_flags(env["LDFLAGS"]),
                 "cpp_link_args": self.sanitize_flags(env["LDFLAGS"]),
+                "fortran_link_args": self.sanitize_flags(env["LDFLAGS"]),
             },
             "properties": {
                 "needs_exe_wrapper": True,
