@@ -149,7 +149,7 @@ class TouchListener:
           `__target_widget` that was provided to `register_listener(...)`.
         - Returns `True` (consume/intercept) only when the picked widget is
           exactly `__target_widget` and no other widget was found under the
-          touch (`final_widget is None`). Otherwise returns `False`.
+          touch. Otherwise returns `False`.
 
         Important notes and limitations:
         - There is no filtering by MotionEvent action; all actions reaching
@@ -178,7 +178,6 @@ class TouchListener:
         # x, y are in Window coordinate. Try to select the widget under the
         # touch.
         me = None
-        final_widget = None
         for child in reversed(Window.children):
             widget = cls._pick(child, x, y)
             if not widget:
