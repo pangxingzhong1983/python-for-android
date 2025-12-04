@@ -466,7 +466,7 @@ main.py that loads it.''')
         if exists(service_main) or exists(service_main + 'o'):
             service = True
 
-    service_names = []
+    service_data = []
     base_service_class = args.service_class_name.split('.')[-1]
     for sid, spec in enumerate(args.services):
         spec = spec.split(':')
@@ -476,8 +476,20 @@ main.py that loads it.''')
 
         foreground = 'foreground' in options
         sticky = 'sticky' in options
+        foreground_type_option = next((s for s in options if s.startswith('foregroundServiceType')), None)
+        if foreground_type_option:
+            try:
+                foreground_type = foreground_type_option.split('=')[1]
+                if not foreground_type:
+                    raise ValueError('Missing value for `foregroundServiceType` option. '
+                                    'Expected format: foregroundServiceType=location')
+            except IndexError:
+                raise ValueError('Missing value for `foregroundServiceType` option. '
+                                'Expected format: foregroundServiceType=location')
+        else:
+            foreground_type = None
 
-        service_names.append(name)
+        service_data.append((name, foreground_type))
         service_target_path =\
             'src/main/java/{}/Service{}.java'.format(
                 args.package.replace(".", "/"),
@@ -541,10 +553,10 @@ main.py that loads it.''')
     render_args = {
         "args": args,
         "service": service,
-        "service_names": service_names,
+        "service_data": service_data,
         "android_api": android_api,
         "debug": "debug" in args.build_mode,
-        "native_services": args.native_services
+        "native_services": args.native_services,
     }
     if is_sdl_bootstrap():
         render_args["url_scheme"] = url_scheme
