@@ -66,7 +66,7 @@ You can optionally specify the following parameters:
  - :code:`:sticky` for launching a service that gets restarted by the Android OS on exit/error
  - :code:`:foregroundServiceType=TYPE` to specify the type of foreground service,
    where TYPE is one of the valid Android foreground service types
-   (see `Android documentation <https://developer.android.com/reference/android/app/Service.html#START_FOREGROUND_SERVICE>`__
+   (see `Android documentation <https://developer.android.com/develop/background-work/services/fgs/service-types>`__
    for more details). You can specify multiple types separated by a pipe
    character "|", e.g. :code:`:foregroundServiceType=location|mediaPlayback`. Mandatory
    if :code:`:foreground` is used on Android 14+.
