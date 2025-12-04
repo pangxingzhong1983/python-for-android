@@ -477,17 +477,15 @@ main.py that loads it.''')
         foreground = 'foreground' in options
         sticky = 'sticky' in options
         foreground_type_option = next((s for s in options if s.startswith('foregroundServiceType')), None)
+        foreground_type = None
         if foreground_type_option:
-            try:
-                foreground_type = foreground_type_option.split('=')[1]
-                if not foreground_type:
-                    raise ValueError('Missing value for `foregroundServiceType` option. '
-                                    'Expected format: foregroundServiceType=location')
-            except IndexError:
-                raise ValueError('Missing value for `foregroundServiceType` option. '
-                                'Expected format: foregroundServiceType=location')
-        else:
-            foreground_type = None
+            parts = foreground_type_option.split('=', 1)
+            if len(parts) != 2 or not parts[1]:
+                raise ValueError(
+                    'Missing value for `foregroundServiceType` option. '
+                    'Expected format: foregroundServiceType=location'
+                )
+            foreground_type = parts[1]
 
         service_data.append((name, foreground_type))
         service_target_path =\
