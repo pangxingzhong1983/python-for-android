@@ -63,7 +63,6 @@ jobs:
     name: Build test APP [ ${{ matrix.runs_on }} | ${{ matrix.bootstrap.name }} ]
     needs: [flake8]
     runs-on: ${{ matrix.runs_on }}
-    continue-on-error: true
     strategy:
       matrix:
         runs_on: [ubuntu-latest]
@@ -81,6 +80,15 @@ jobs:
     steps:
     - name: Checkout python-for-android
       uses: actions/checkout@v5
+    # helps with GitHub runner getting out of space
+    - name: Free disk space
+      run: |
+        df -h
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt -y clean
+        docker images -q | xargs -r docker rmi
+        df -h
     - name: Build python-for-android docker image
       run: |
         docker build --tag=kivy/python-for-android .
@@ -113,7 +121,6 @@ jobs:
     name: Build test APP [ ${{ matrix.runs_on }} | ${{ matrix.bootstrap.name }} ]
     needs: [flake8]
     runs-on: ${{ matrix.runs_on }}
-    continue-on-error: true
     strategy:
       matrix:
         # macos-latest (ATM macos-15) runs on Apple Silicon,
@@ -188,6 +195,7 @@ jobs:
     name: Test updated recipes for arch ${{ matrix.android_arch }} [ ubuntu-latest ]
     needs: [flake8]
     runs-on: ubuntu-latest
+    # continue on error to see failures across all architectures
     continue-on-error: true
     strategy:
       matrix:
@@ -219,6 +227,7 @@ jobs:
     name: Test updated recipes for arch ${{ matrix.android_arch }} [ ${{ matrix.runs_on }} ]
     needs: [flake8]
     runs-on: ${{ matrix.runs_on }}
+    # continue on error to see failures across all architectures
     continue-on-error: true
     strategy:
       matrix:
