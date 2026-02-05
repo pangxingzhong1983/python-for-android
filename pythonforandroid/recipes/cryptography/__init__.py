@@ -4,7 +4,7 @@ from pythonforandroid.recipe import CompiledComponentsPythonRecipe, Recipe
 class CryptographyRecipe(CompiledComponentsPythonRecipe):
     name = 'cryptography'
     version = '2.8'
-    url = 'https://github.com/pyca/cryptography/archive/{version}.tar.gz'
+    url = 'https://files.pythonhosted.org/packages/source/c/cryptography/cryptography-{version}.tar.gz'
     depends = ['openssl', 'six', 'setuptools', 'cffi']
     call_hostpython_via_targetpython = False
 

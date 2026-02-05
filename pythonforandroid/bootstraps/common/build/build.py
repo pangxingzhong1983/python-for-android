@@ -1010,6 +1010,13 @@ def parse_args_and_make_package(args=None):
 
     args = ap.parse_args(args)
 
+    # Backward compatibility: some callers may omit orientation arguments.
+    # Ensure the namespace always has these attributes to avoid packaging crashes.
+    if not hasattr(args, "orientation"):
+        args.orientation = []
+    if not hasattr(args, "manifest_orientation"):
+        args.manifest_orientation = None
+
     if args.name and args.name[0] == '"' and args.name[-1] == '"':
         args.name = args.name[1:-1]
 

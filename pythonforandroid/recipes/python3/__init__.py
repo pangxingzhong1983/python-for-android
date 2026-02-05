@@ -62,6 +62,7 @@ class Python3Recipe(TargetPythonRecipe):
     patches = [
         'patches/pyconfig_detection.patch',
         'patches/reproducible-buildinfo.diff',
+        'patches/disable-android-grp.patch',
 
         # Python 3.7.1
         ('patches/py3.7.1_fix-ctypes-util-find-library.patch', version_starts_with("3.7")),
@@ -100,6 +101,14 @@ class Python3Recipe(TargetPythonRecipe):
         '--without-ensurepip',
         'ac_cv_little_endian_double=yes',
         'ac_cv_header_sys_eventfd_h=no',
+        'ac_cv_header_grp_h=no',
+        'ac_cv_func_setgrent=no',
+        'ac_cv_func_getgrent=no',
+        'ac_cv_func_endgrent=no',
+        'ac_cv_func_getpwent=no',
+        'ac_cv_func_endpwent=no',
+        'ac_cv_func_getgrouplist=no',
+        'ac_cv_func_initgroups=no',
         '--prefix={prefix}',
         '--exec-prefix={exec_prefix}',
         '--enable-loadable-sqlite-extensions'

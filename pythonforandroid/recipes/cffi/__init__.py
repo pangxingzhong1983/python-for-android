@@ -23,6 +23,7 @@ class CffiRecipe(CompiledComponentsPythonRecipe):
         libffi = self.get_recipe('libffi', self.ctx)
         includes = libffi.get_include_dirs(arch)
         env['FFI_INC'] = ",".join(includes)
+        env['CFFI_USE_EMBEDDED_FFI'] = '1'
         return env
 
     def get_recipe_env(self, arch=None):
